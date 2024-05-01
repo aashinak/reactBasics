@@ -32,7 +32,7 @@ function Focus() {
 
     const copyPasswordToClipBoard = ()=>{
         window.navigator.clipboard.writeText(password)
-        passwordRef.current.select()
+        passwordRef.current?.select()
     }
   return (
     <div className="w-full h-screen flex justify-center items-center flex-col">
