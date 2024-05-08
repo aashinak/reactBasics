@@ -12,7 +12,7 @@ function Todo() {
         <label className="text-white font-semibold" htmlFor="">{todo.text}</label>
         <button 
         onClick={() => dispatch(removeTodo(todo.id))}
-        className="btn bg-gray-200 p-1 rounded-lg w-24 text-red-700"><i className="fa fa-trash mr-1"></i>DELETE</button>
+        className="btn bg-gray-200 p-1 rounded-lg w-24 text-red-700 hover:bg-red-700 hover:text-white ease-in duration-150 transition-all"><i className="fa fa-trash mr-1"></i>DELETE</button>
         </div>
       ))}
 
