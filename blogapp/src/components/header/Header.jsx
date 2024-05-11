@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 
 function Header() {
     const authStatus = useSelector( (state) => state.auth.status )
+    const userData = useSelector((state) => state.auth.userData)
     const navigate = useNavigate()
 
     const navItems = [
@@ -41,7 +42,7 @@ function Header() {
             <nav className="flex">
                 <div className="mr-4">
                     <Link to="/">
-                        <Logo/>
+                        <Logo width="17%"/>
                     </Link>
                 </div>
                 <ul className="flex ml-auto">
@@ -58,10 +59,29 @@ function Header() {
                     }
                     {
                         authStatus && (
-                            <li>
+                            
+                                 <li>
                                 <LogoutBtn/>
                             </li>
+                            
+                           
+                            
+                              
                         )
+                        
+                    }
+                    {
+                        authStatus && (
+                            
+                               <li className="inline-block px-6 py-2 font-bold text-white">
+                                {userData.name}
+                               </li>
+                            
+                           
+                            
+                              
+                        )
+                        
                     }
                 </ul>
             </nav>

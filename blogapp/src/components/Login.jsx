@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import {useDispatch} from 'react-redux'
 import { useState } from "react"
 import { login as authLogin } from "../store/authSlice"
+import Loader from "./Loader"
 
 
 function Login() {
@@ -16,21 +17,35 @@ function Login() {
 
     const [error, setError] = useState("")
     const {register, handleSubmit} = useForm()
+    const [loader, setLoader] = useState(false)
 
     const login = async (data) => {
+        setLoader(true)
         setError("")
         try {
             const session = await authService.login(data)
 
             if(session) {
-                const userData = authService.getCurrentUser()
-                if(userData) dispatch(authLogin({userData}))
-                    navigate("/")
+                const userData = await authService.getCurrentUser()
+                    
+                    if(userData)dispatch(authLogin({userData}))
+                        setLoader(false)
+                        navigate("/")
+
             }
         } catch (error) {
             setError(error)
         }
     }
+   if(loader) {
+    return(
+       
+        
+           <Loader/>
+        
+    
+    )
+   }
   return (
     <div className="flex items-center justify-center w-full">
     <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
@@ -65,6 +80,8 @@ function Login() {
                     label="Password : "
                     type="password"
                     placeholder="Password"
+                    pattern=".{8,}"   
+                    title="8 characters minimum"
                     {...register("password", { required: true })}
                 />
                 <Button type="submit" className="w-full">

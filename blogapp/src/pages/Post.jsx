@@ -14,7 +14,7 @@ function Post() {
   const navigate = useNavigate()
 
   const userData = useSelector((state) => state.auth.userData) 
-  const isAuthor = post && userData ? post.id === userData.$id : false
+  const isAuthor = post && userData ? post.userId === userData.$id : false
 
   useEffect(() => {
     if (slug) {
@@ -44,8 +44,9 @@ function Post() {
           <img 
           src={appwriteService.getFilePreview(post.featuredImage)} 
           alt={post.title}
-          className="rounded-xl"  />
+          className="rounded-xl w-1/2"  />
           {
+            
             isAuthor && (
               <div className="absolute top-0 right-0">
                 <Link to={`/edit-post/${post.$id}`}>

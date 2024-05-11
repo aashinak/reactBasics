@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import {useDispatch} from 'react-redux'
 import { useState } from "react"
 import { login } from "../store/authSlice"
+import Loader from "./Loader"
 
 
 function Signup() {
@@ -15,21 +16,30 @@ function Signup() {
     const dispatch = useDispatch()
 
     const [error, setError] = useState("")
+    const [loader, setLoader] = useState(false)
+
 
     const { register, handleSubmit } = useForm()
 
     const create = async (data) => {
         setError("")
+        setLoader(true)
         try {
-            const userData = await authService.createAccount(data)
+            const userData =  await authService.createAccount(data)
             if(userData){
-               const userData = authService.getCurrentUser()
+               const userData = await authService.getCurrentUser()
                if(userData) dispatch(login({userData}))
+                setLoader(false)
                 navigate("/")
             }
         } catch (error) {
             setError(error)
         }
+    }
+    if(loader){
+        return (
+            <Loader/>
+        )
     }
   return (
     <div className="flex items-center justify-center">
@@ -70,6 +80,8 @@ function Signup() {
                             {...register("password", { required: true })}
                             label="Password : "
                             type="password"
+                            pattern=".{8,}"   
+                            title="8 characters minimum"
                             placeholder="Password"
                         />
                         <Button type="submit" className="w-full">

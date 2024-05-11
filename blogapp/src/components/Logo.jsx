@@ -1,7 +1,8 @@
+import logoImg from '../blog.png'
 
 function Logo({width = "100%"}) {
   return (
-    <img src="" alt="Logo" style={{width}} />
+    <img className='rounded-lg' src={logoImg} alt="Logo" style={{width}} />
   )
 }
 

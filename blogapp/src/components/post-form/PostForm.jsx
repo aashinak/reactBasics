@@ -6,8 +6,8 @@ import appwriteService from '../../appwrite/config'
 import { useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { useCallback, useEffect } from "react"
-
+import { useCallback, useEffect, useState } from "react"
+import Loader from "../Loader"
 
 function PostForm({post}) {
 
@@ -20,10 +20,12 @@ function PostForm({post}) {
         }
     })
 
+    const [loader, setLoader] = useState(false)
     const navigate = useNavigate()
     const userData = useSelector((state) => state.auth.userData)
 
     const submit = async(data) => {
+        setLoader(true)
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null
 
@@ -33,8 +35,10 @@ function PostForm({post}) {
 
             const dbPost = appwriteService.updatePost(post.$id, {...data, featuredImage: file ? file.$id : undefined})
             if (dbPost) {
+                setLoader(false)
                 navigate(`/post/${dbPost.$id}`)
             }
+            
         }else{
             const file = await appwriteService.uploadFile(data.image[0])
             if(file){
@@ -64,7 +68,15 @@ function PostForm({post}) {
         })
     },[watch, setValue, slugTransform])
 
-
+    if(loader){
+        return(
+       
+        
+           <Loader/>
+        
+    
+    )
+    }
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
         <div className="w-2/3 px-2">
@@ -73,6 +85,7 @@ function PostForm({post}) {
             label="Title"
             placeholder="Title"
             className="mb-4"
+
             {...register("title", { required : true })}
             />
 
